@@ -81,7 +81,7 @@ class FixedOnlineGP:
     
     Args:
         input_space (np.ndarray): Input space data points for the model.
-        kernel_type (str, optional): Type of kernel to use ('rbf', 'Mat32', 'Mat52'). Defaults to 'rbf'.
+        kernel_type (str, optional): Type of kernel to use ('RBF', 'Matern32', 'Matern52'). Defaults to 'RBF'.
         noise_std (float, optional): Standard deviation of the noise. Defaults to 0.1.
         output_std (float, optional): Standard deviation of the output. Defaults to 1.
         lengthscale (float, optional): Lengthscale parameter for the kernel. Defaults to 0.05.
@@ -94,7 +94,7 @@ class FixedOnlineGP:
         predict(): Computes the predicted mean and standard deviation for each point in the input space.
     """
 
-    def __init__(self, input_space: np.ndarray, kernel_type: str = 'rbf', noise_std: float = 0.1, output_std: float = 1, lengthscale: float = 0.05, NB_IT: int = None) -> None:
+    def __init__(self, input_space: np.ndarray, kernel_type: str = 'RBF', noise_std: float = 0.1, output_std: float = 1, lengthscale: float = 0.05, NB_IT: int = None) -> None:
         """Initializes the Gaussian Process model with specified hyperparameters.
 
         Args:
@@ -129,23 +129,23 @@ class FixedOnlineGP:
         """Sets the kernel function based on the selected kernel type.
 
         Raises:
-            ValueError: If the kernel_type is not recognized (i.e., not 'rbf', 'Mat32', or 'Mat52').
+            ValueError: If the kernel_type is not recognized (i.e., not 'RBF', 'Matern32', or 'Matern52').
         """
         if isinstance(self.lengthscale, float) or (isinstance(self.lengthscale, list) and len(self.lengthscale) == 1):     
-            if self.kernel_type == 'rbf':
+            if self.kernel_type == 'RBF':
                 self.kernel = GPy.kern.RBF(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale)
-            elif self.kernel_type == 'Mat32':
+            elif self.kernel_type == 'Matern32':
                 self.kernel = GPy.kern.Matern32(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale)
-            elif self.kernel_type == 'Mat52':
+            elif self.kernel_type == 'Matern52':
                 self.kernel = GPy.kern.Matern52(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale)
             else:
                 raise ValueError("The attribute kernel_type is not well defined")
         elif len(self.lengthscale) == self.space_dim:
-            if self.kernel_type == 'rbf':
+            if self.kernel_type == 'RBF':
                 self.kernel = GPy.kern.RBF(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale, ARD=True)
-            elif self.kernel_type == 'Mat32':
+            elif self.kernel_type == 'Matern32':
                 self.kernel = GPy.kern.Matern32(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale, ARD=True)
-            elif self.kernel_type == 'Mat52':
+            elif self.kernel_type == 'Matern52':
                 self.kernel = GPy.kern.Matern52(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale, ARD=True)
             else:
                 raise ValueError("The attribute kernel_type is not well defined")

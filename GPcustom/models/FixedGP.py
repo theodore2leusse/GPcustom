@@ -23,7 +23,7 @@ class FixedGP:
         input_space (np.ndarray): The input space for the GP. 
         train_X (np.ndarray): The training input data.
         train_Y (np.ndarray): The training output data.
-        kernel_type (str): The type of kernel to be used ('rbf', 'Mat32', or 'Mat52').
+        kernel_type (str): The type of kernel to be used ('RBF', 'Matern32', 'Matern52'). Defaults to 'RBF'.
         noise_std (float): The standard deviation of the noise in the output.
         output_std (float): The standard deviation of the output function.
         lengthscale (float): The lengthscale parameter for the kernel.
@@ -43,7 +43,7 @@ class FixedGP:
         predict: Predicts the mean and standard deviation of the GP for the input space.
     """
 
-    def __init__(self, input_space: np.ndarray, train_X: np.ndarray, train_Y: np.ndarray, kernel_type: str = 'rbf', noise_std=0.1, output_std=1, lengthscale=0.05) -> None:
+    def __init__(self, input_space: np.ndarray, train_X: np.ndarray, train_Y: np.ndarray, kernel_type: str = 'RBF', noise_std=0.1, output_std=1, lengthscale=0.05) -> None:
         """
         Initializes the FixedLengthscalesGP instance.
 
@@ -51,7 +51,7 @@ class FixedGP:
             input_space (np.ndarray): The input space for the GP. shape(space_size, space_dim)
             train_X (np.ndarray): The training input data. shape(train_size, space_dim)
             train_Y (np.ndarray): The training output data. shape(train_size, 1)
-            kernel_type (str, optional): The type of kernel to be used. Defaults to 'rbf'.
+            kernel_type (str, optional): The type of kernel to be used ('RBF', 'Matern32', 'Matern52'). Defaults to 'RBF'.
             noise_std (float, optional): The standard deviation of the noise in the output. Defaults to 0.1.
             output_std (float, optional): The standard deviation of the output function. Defaults to 1.
             lengthscale (float, optional): The lengthscale parameter for the kernel. Defaults to 0.05.
@@ -77,20 +77,20 @@ class FixedGP:
             ValueError: If `kernel_type` is not recognized or `lengthscale` is invalid.
         """
         if isinstance(self.lengthscale, float) or (isinstance(self.lengthscale, list) and len(self.lengthscale) == 1):     
-            if self.kernel_type == 'rbf':
+            if self.kernel_type == 'RBF':
                 self.kernel = GPy.kern.RBF(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale)
-            elif self.kernel_type == 'Mat32':
+            elif self.kernel_type == 'Matern32':
                 self.kernel = GPy.kern.Matern32(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale)
-            elif self.kernel_type == 'Mat52':
+            elif self.kernel_type == 'Matern52':
                 self.kernel = GPy.kern.Matern52(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale)
             else:
                 raise ValueError("The attribute kernel_type is not well defined")
         elif len(self.lengthscale) == self.space_dim:
-            if self.kernel_type == 'rbf':
+            if self.kernel_type == 'RBF':
                 self.kernel = GPy.kern.RBF(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale, ARD=True)
-            elif self.kernel_type == 'Mat32':
+            elif self.kernel_type == 'Matern32':
                 self.kernel = GPy.kern.Matern32(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale, ARD=True)
-            elif self.kernel_type == 'Mat52':
+            elif self.kernel_type == 'Matern52':
                 self.kernel = GPy.kern.Matern52(input_dim=self.space_dim, variance=self.output_std**2, lengthscale=self.lengthscale, ARD=True)
             else:
                 raise ValueError("The attribute kernel_type is not well defined")
