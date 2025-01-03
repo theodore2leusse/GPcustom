@@ -106,10 +106,10 @@ class GPytorchFixed(gpytorch.models.ExactGP):
             output = self(test_X)
             pred = self.likelihood(output)
         
-        mean = pred.mean
-        std = pred.variance.sqrt()
+        self.mean = pred.mean
+        self.std = pred.variance.sqrt()
 
-        return mean.clone(), std.clone()
+        return self.mean.clone(), self.std.clone()
 
 if __name__ == "__main__":
     # Example usage
