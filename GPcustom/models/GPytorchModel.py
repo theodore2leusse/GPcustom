@@ -15,7 +15,7 @@ class GPytorchModel(gpytorch.models.ExactGP):
         kernel_type (str): Type of kernel ('Matern52' or 'RBF').
     """
 
-    def __init__(self, train_x, train_y, likelihood, kernel_type: str = 'Matern52', outputscale=None, noise=None):
+    def __init__(self, train_x, train_y, likelihood, kernel_type: str = 'Matern52', outputscale: float = None, noise: float = None):
         """
         Initializes the Gaussian Process model with the specified kernel type.
 
@@ -24,6 +24,8 @@ class GPytorchModel(gpytorch.models.ExactGP):
             train_y (torch.Tensor): Target training data.
             likelihood (gpytorch.likelihoods): Gaussian likelihood function.
             kernel_type (str): Kernel type, either 'Matern52' or 'RBF'.
+            outputscale (float, optional): if float, fixed and define the hyperparameter outputscale. Default to None.
+            noise (float, optional): if float, fixed and define the hyperparameter noise variance. Defaylt to None.
         """
         super().__init__(train_x, train_y, likelihood)
         
