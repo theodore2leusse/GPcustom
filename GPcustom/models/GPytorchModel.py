@@ -15,7 +15,7 @@ class GPytorchModel(gpytorch.models.ExactGP):
         kernel_type (str): Type of kernel ('Matern52' or 'RBF').
     """
 
-    def __init__(self, train_x, train_y, likelihood, kernel_type: str = 'Matern52'):
+    def __init__(self, train_x, train_y, likelihood, kernel_type: str = 'Matern52', outputscale=None, noise=None):
         """
         Initializes the Gaussian Process model with the specified kernel type.
 
@@ -42,12 +42,20 @@ class GPytorchModel(gpytorch.models.ExactGP):
         self.covar_module.base_kernel.register_constraint(
             "raw_lengthscale", gpytorch.constraints.Interval(0.05, 2.0)
         )
-        self.covar_module.register_constraint(
-            "raw_outputscale", gpytorch.constraints.Interval(0.5, 3.0)
-        )
-        self.likelihood.noise_covar.register_constraint(
-            "raw_noise", gpytorch.constraints.Interval(1e-3, 2)
-        )
+        if outputscale is not None:
+            self.covar_module.outputscale = outputscale
+            self.covar_module.raw_outputscale.requires_grad = False
+        else:
+            self.covar_module.register_constraint(
+                "raw_outputscale", gpytorch.constraints.Interval(0.5, 3.0)
+            )           
+        if noise is not None:
+            self.likelihood.noise = noise
+            self.likelihood.raw_noise.requires_grad = False
+        else:
+            self.likelihood.noise_covar.register_constraint(
+                "raw_noise", gpytorch.constraints.Interval(1e-3, 2)
+            )
 
     def forward(self, x):
         """
