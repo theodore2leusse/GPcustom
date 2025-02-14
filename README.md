@@ -1,17 +1,20 @@
 This job was done by Théodore DE LEUSSE as part of his internship in the SciNeurotechLab supervised by Marco BONIZZATO.
 
-This file allow us to discover how to use the differents models and to do some comparaison between them. 
-What's more, the `A` part shows the quadratic complexity of the method using the Schur complement inversion, compared to the cubic complexity of the commonly used cholesky inverson. 
-
 # GPcustom
 
 A custom implementation of Gaussian Process models using different backends (GPytorch, NumPy).
+
+You will find in GPcustom\models:
 
 - `FixedGP` &  `FixedOnlineGP` use only Numpy. They help us to understand what exactly is done in libraries such as gpytorch.
 - `BOtorchModel` uses the botorch lib. I implemented the class but I didn't use it. But it can be usefull if you want to use some acquisition function from botorch in continuus space.
 - `GPytorchFixed` & `GPytorchModel` use gpytorch. This is the one I used the most, especially for simulation in ``GPBOsimulator``.
 
+You will find in notebooks:
 
+- GPcomparaison.ipynb : This file allow us to discover how to use the differents models and to do some comparaison between them. 
+                        What's more, the `A` part shows the quadratic complexity of the method using the Schur complement inversion, 
+                        compared to the cubic complexity of the commonly used cholesky inverson.
 
 ## Installation 
 
