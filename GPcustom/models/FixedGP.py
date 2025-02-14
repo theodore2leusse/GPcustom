@@ -130,7 +130,7 @@ class FixedGP:
 
         # Compute the std for each point in a vectorized manner
         kernel_diag = np.einsum('ij,ji->i', self.kernel_vect_mat, self.K_inv @ self.kernel_vect_mat.T)
-        if max(kernel_diag) > self.output_std**2:
+        if max(kernel_diag) > (self.output_std**2 + self.noise_std**2):
             print('we have a problem, we have a negative variance')
         self.std = np.sqrt(self.output_std**2 - kernel_diag + self.noise_std**2)
 
