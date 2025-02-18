@@ -1,4 +1,5 @@
 This job was done by Théodore DE LEUSSE as part of his internship in the SciNeurotechLab supervised by Marco BONIZZATO.
+This internship took place from the September 3rd 2024 to February 17th 2025.
 
 # GPcustom
 
